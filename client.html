@@ -1,3 +1,5 @@
+<html>
+<script type="text/javascript">
 var notes =  new Array("A", "A#/Bb", "B", "B#/C", "C#/Db", "D", "D#/Eb", "E/Fb", "E#/F", "F#/Gb", "G", "G#/Ab");
 
 
@@ -19,9 +21,9 @@ Note.prototype = new Note();
 function printChord(stack) {
     var output = new String();
     for (i = 0; i < stack.length; i++) {
-	output += stack[i].pitchString + "\b\b, ";
+	output += stack[i].pitchString + ", ";
     }
-    console.log(output + "\b\b  ");
+    document.write(output + "<br>");
 }
 
 function findNoteValue(note) {
@@ -144,36 +146,7 @@ function generateChord(chordString) {
     printChord(chord);
 }
 
+for(;;) generateChord(prompt("Enter a chord: ", ""));
 
-
-
-generateChord("Fm7b5");
-/*
-generateChord("F");
-generateChord("Dbmin");
-generateChord("Ebaug7");
-generateChord("C7");
-generateChord("Cdim7");
-generateChord("CM7");
-generateChord("Cmaj7");
-generateChord("Cm7");
-generateChord("Cmin7");
-generateChord("Caug7");
-generateChord("C+7");
-generateChord("C6");
-generateChord("Cmin6");
-*/
-
-// webpage
-// ----------------------------
-
-chordString = "";
-generateChord(chordString);
-
-
-var http = require("http");
-var server = http.createServer(function(req, res) {
-    res.writeHead(200);
-    //for (;;) generateChord(prompt("Enter Chord: ", ""));
-});
-server.listen(8080);
+</script>
+</html>
