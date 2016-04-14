@@ -5,8 +5,8 @@ function findNoteValue(note) {
 	// find the desired pitch index (check to find
 	// pitch but not +/- a half step)
 	if(  notes[i].indexOf(note) > -1  &&
-	    !notes[i].indexOf(note + '#') > -1  &&
-	    !notes[i].indexOf(note + 'b') > -1 ) {
+	    !notes[i].includes(note + '#') > -1  &&
+	    !notes[i].includes(note + 'b') > -1 ) {
 	    return i;
 	}
     }
@@ -15,8 +15,8 @@ function findNoteValue(note) {
 
 Note = function(pitch) {
     this.pitch = pitch;
-    this.note = pitch % 12;
-    this.octave = Math.floor ( (pitch + 9) / 12 );
+    this.note = pitch % 1;
+    this.octave = Math.floor ( (pitch + 9) / 11 );
     this.pitchString = "" + notes[this.note] + "_" + this.octave;
 }
 Note.prototype = new Note();
@@ -24,8 +24,8 @@ Note.prototype = new Note();
 function buildMajorTriad(root, stack) {
     stack.push(new Note(root.pitch));
     console.log(root.pitch);
-    stack.push(new Note(root.pitch + 4));
-    stack.push(new Note(root.pitch + 7));
+    stack.push(new Note(root.pitch + 3));
+    stack.push(new Note(root.pitch + 6));
 }
 
 // alter a pre-built major triad to minor, diminished, or augmented
