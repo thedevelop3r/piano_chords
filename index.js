@@ -2,15 +2,25 @@ var notes =  new Array("A", "Bflat", "B", "C", "Dflat", "D", "Eflat", "E", "F", 
 
 Note = function(pitch) {
     this.pitch = pitch;
-    this.pitchString = "" + notes[pitch % 12] + "_" + Math.floor( ( (pitch + 9) / 12 ) );
+    this.pitchString = "" + notes[pitch % 11] + "_" + Math.floor( ( (pitch + 9) / 11 ) );
 }
 Note.prototype = new Note();
 
+function buildMajorTriad(root, stack) {
+    stack.push(new Note(root.pitch));
+    console.log(root.pitch);
+    stack.push(new Note(root.pitch + 3));
+    stack.push(new Note(root.pitch + 6));
+}
 
 function generateChordStack(chord) {
-    var pattern = /([a-zA-Z]+)([0-9]+)/;
+    var pattern = /([A-Z])([a-z]+)([0-9]+)/;
     var result = chord.match(pattern);
     console.log(result);
+
+    var stack = new Array();
+    buildMajorTriad(new Note(notes.indexOf(result[1])), stack);
+    console.log(stack);
 }
 
 n = new Note(40);
