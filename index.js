@@ -1,5 +1,14 @@
 var notes =  new Array("A", "A#/Bb", "B", "B#/C", "C#/Db", "D", "D#/Eb", "E/Fb", "E#/F", "F#/Gb", "G", "G#/Ab");
 
+
+Note = function(pitch) {
+    this.pitch = pitch;
+    this.note = pitch % 12;
+    this.octave = Math.floor ( (pitch + 9) / 12 );
+    this.pitchString = "" + notes[this.note] + "_" + this.octave;
+}
+Note.prototype = new Note();
+
 function findNoteValue(note) {
     for(i = 0; i < notes.length; i++) {
 	// find the desired pitch index (check to find
@@ -12,14 +21,6 @@ function findNoteValue(note) {
     }
   return -1;
 }
-
-Note = function(pitch) {
-    this.pitch = pitch;
-    this.note = pitch % 12;
-    this.octave = Math.floor ( (pitch + 9) / 12 );
-    this.pitchString = "" + notes[this.note] + "_" + this.octave;
-}
-Note.prototype = new Note();
 
 function buildMajorTriad(root, stack) {
     stack.push(new Note(root.pitch));
@@ -36,18 +37,19 @@ function alterTriad(stack, type) {
 	stack[2] = new Note(stack[2].pitch - 1);
     }
     // lower 3rd for minor triad
-    else if (type === "m") {
+    else if (type === "m" || type == "min" || type == "-") {
 	stack[1] = new Note(stack[1].pitch - 1);
     }
     // raise 5th for augmented triad
-    else if (type === "aug") {
+    else if (type === "aug" || type === "+") {
 	stack[2] = new Note(stack[2].pitch + 1);
     }
     // pass for major triad
 }
 
 function generateChordStack(chord) {
-    var pattern = /([A-Z#b])([a-z]+)([0-9]+)/;
+    var pattern = /([A-Z#b]+)?([a-z\+\-]+)?([0-9]+)?/;
+    //pattern = /([A-Z#b])([a-z]+)([0-9]+)?/;
     var result = chord.match(pattern);
     console.log(result);
 
@@ -62,7 +64,7 @@ function generateChordStack(chord) {
 //console.log(n);
 //console.log(n.pitchString);
 
-generateChordStack("Fm7");
+generateChordStack("F#+");
 
 var http = require("http");
 
