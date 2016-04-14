@@ -39,12 +39,21 @@ function findNoteValue(note) {
 
 function buildBaseChord(root, type, chord) {
 
-    // build triad
+    // build triad (manages suspensions; for other
+    // altered triads see alterBaseChord)
     chord.push(new Note(root.pitch));
-    chord.push(new Note(root.pitch + 4));
+    if (type == 2) {
+	chord.push(new Note(root.pitch + 2));
+    }
+    else if (type == 4) {
+	chord.push(new Note(root.pitch + 5));
+    }
+    else {
+	chord.push(new Note(root.pitch + 4));
+    }
     chord.push(new Note(root.pitch + 7));
 
-    // handle 6 chords
+     // handle 6 chords
     if (type == 6) chord.push(new Note(root.pitch + 9));
    
     // handle 7,9,11,13 chords
@@ -69,7 +78,7 @@ function buildBaseChord(root, type, chord) {
 }       
 
 // alter a pre-built chord chord
-function alterBaseChord(chord, type) {
+function alterBaseChord(chord, type, build, change, note) {
     // alter to diminished chord
     if (type  === "dim") {
 	for(i = 1; i <= 3; i++)
@@ -77,23 +86,46 @@ function alterBaseChord(chord, type) {
     }
     // alter to minor chord
     else if (type === "m" || type == "min" || type == "-") {
-	chord[1] = new Note(chord[1].pitch - 1);
+	chord[1].alter(-1);
     }
     // alter to augmented chord
     else if (type === "aug" || type === "+") {
-	chord[2] = new Note(chord[2].pitch + 1);
-	chord[3] = new Note(chord[3].pitch + 1);
+	chord[2].alter(1);
+	chord[3].alter(1);
     }
     // alter to major chord
     else if (type == "maj" || type == "M") {
-	chord[3] = new Note(chord[3].pitch + 1);
+	chord[3].alter(1);
+    }
+    // alter to minor major chord
+    else if (type == "mM") {
+	chord[1].alter(-1);
+	chord[3].alter(1);
+    }
+    // alter to suspended chord
+    else if (type == "sus") {
+	if (build == undefined || build == 2)
+	    if (chord[1].pitch != chord[0].pitch + 2) 
+		chord.splice(1, 0, new Note(chord[0].pitch + 2));
+	else if (build == 4)
+	    if (chord[1].pitch != chord[0].pitch + 5)
+		chord.splice(1, 0, new Note(chord[0].pitch + 5));
+    }
+    else if (type == "add") {
+    }
+
+    if (change === "b") {
+	if (note == 5) chord[2].alter(-1);
+    }
+    else if (change === "#") {
+	if (note == 5) chord[2].alter(1);
     }
 }
 
 function generateChord(chordString) {
     // parse chord as list of aspects:
     // [chord, root, alterations, build]
-    var pattern = /([ABCDEFG#b]+)?([a-zA-Z\+\-]+)?([0-9]+)?/;
+    var pattern = /([A-G#b]+)?([a-zA-Z\+\-]+)?([0-9]+)?([adb#]+)?([0-9]+)?/;
     var result = chordString.match(pattern);
     //console.log(result);
 
@@ -103,14 +135,21 @@ function generateChord(chordString) {
 	new Note(findNoteValue(result[1])),
 	parseInt(result[3]),
 	chord);
-    alterBaseChord(chord, result[2]);
+    alterBaseChord(chord,
+		   result[2],
+		   parseInt(result[3]),
+		   result[4],
+		   parseInt(result[5]));
     console.log(chordString + ": ");
     printChord(chord);
 }
 
 
-generateChord("F");
+generateChord("Fm7b5");
 /*
+generateChord("F");
+generateChord("Dbmin");
+generateChord("Ebaug7");
 generateChord("C7");
 generateChord("Cdim7");
 generateChord("CM7");
