@@ -29,8 +29,8 @@ function findNoteValue(note) {
 	// find the desired pitch index (check to find
 	// pitch but not +/- a half step)
 	if(  notes[i].indexOf(note) > -1  &&
-	    !notes[i].indexOf(note + '#') > -1  &&
-	    !notes[i].indexOf(note + 'b') > -1 ) {
+	    !(notes[i].indexOf(note + '#') > -1)  &&
+	    !(notes[i].indexOf(note + 'b') > -1 )) {
 	    return i;
 	}
     }
@@ -108,6 +108,9 @@ function generateChord(chordString) {
     printChord(chord);
 }
 
+
+generateChord("F");
+/*
 generateChord("C7");
 generateChord("Cdim7");
 generateChord("CM7");
@@ -116,7 +119,9 @@ generateChord("Cm7");
 generateChord("Cmin7");
 generateChord("Caug7");
 generateChord("C+7");
-
+generateChord("C6");
+generateChord("Cmin6");
+*/
 
 // webpage
 // ----------------------------
