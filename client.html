@@ -83,7 +83,7 @@ function buildBaseChord(root, type, chord) {
 function alterBaseChord(chord, type, build, change, note) {
     // alter to diminished chord
     if (type  === "dim") {
-	for(i = 1; i <= 3; i++)
+	for(i = 1; i <= 3 && i < chord.length; i++)
 	    chord[i].alter(-1);
     }
     // alter to minor chord
