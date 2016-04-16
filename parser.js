@@ -19,9 +19,9 @@ Note.prototype = new Note();
 function printChord(stack) {
     var output = new String();
     for (i = 0; i < stack.length; i++) {
-	output += stack[i].pitchString + "\b\b, ";
+	output += stack[i].pitchString;
     }
-    console.log(output + "\b\b  ");
+    document.write(output + "<br>");
 }
 
 function findNoteValue(note) {
@@ -86,7 +86,7 @@ function alterBaseChord(chord, type, build, change, note) {
 	    chord[i].alter(-1);
     }
     // alter to minor chord
-    else if (type === "m" || type == "min" || type == "-") {
+    else if (type === "m" || type === "min" || type === "-") {
 	chord[1].alter(-1);
     }
     // alter to augmented chord
@@ -95,31 +95,36 @@ function alterBaseChord(chord, type, build, change, note) {
 	chord[3].alter(1);
     }
     // alter to major chord
-    else if (type == "maj" || type == "M") {
+    else if (type === "maj" || type === "M") {
 	chord[3].alter(1);
     }
     // alter to minor major chord
-    else if (type == "mM") {
+    else if (type === "mM") {
 	chord[1].alter(-1);
 	chord[3].alter(1);
     }
     // alter to suspended chord
-    else if (type == "sus") {
-	if (build == undefined || build == 2)
+    else if (type === "sus") {
+	if (build === undefined || build == 2)
 	    if (chord[1].pitch != chord[0].pitch + 2) 
 		chord.splice(1, 0, new Note(chord[0].pitch + 2));
 	else if (build == 4)
 	    if (chord[1].pitch != chord[0].pitch + 5)
 		chord.splice(1, 0, new Note(chord[0].pitch + 5));
     }
-    else if (type == "add") {
+    else if (type === "add") {
+	
     }
 
-    if (change === "b") {
+    if (change === "b" || change === "-") {
 	if (note == 5) chord[2].alter(-1);
+	if (note == 9) chord[4].alter(-1);
+	if (note == 11) chord[5].alter(-1);
     }
-    else if (change === "#") {
+    else if (change === "#" || change ==="+") {
 	if (note == 5) chord[2].alter(1);
+	if (note == 9) chord[4].alter(1);
+	if (note == 11) chord[5].alter(1);
     }
 }
 
@@ -168,13 +173,15 @@ generateChord("Cmin6");
 // webpage
 // ----------------------------
 
-chordString = "";
-generateChord(chordString);
+for(;;) generateChord(prompt("Enter a chord: ", ""));
 
+//chordString = "";
+//generateChord(chordString);
 
+/*
 var http = require("http");
 var server = http.createServer(function(req, res) {
     res.writeHead(200);
     //for (;;) generateChord(prompt("Enter Chord: ", ""));
 });
-server.listen(8080);
+server.listen(8080);*/
