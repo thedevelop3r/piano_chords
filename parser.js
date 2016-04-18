@@ -40,6 +40,31 @@ Chord = function(notes) {
 }
 Chord.prototype = new Chord();
 
+Progression = function(notes) {
+    this.chords = chords;
+    
+    this.get = function(index) {
+	return this.chords[index];
+    }
+ 
+    this.push = function(chord) {
+	this.chords.push(chord);
+    }
+
+    this.splice = function(index, replace, value) {
+	this.chords.splice(index, replace, value);
+    }
+    
+    this.getProgressionString = function() {
+	var output = new String();
+	for (i = 0; i < this.chords.length; i++) {
+	    output += this.chords[i].chordString + "<br>";
+	}
+	return output;
+    }
+}
+Progression.prototype = new Progression();
+
 function findNoteValue(note) {
     for(i = 0; i < notes.length; i++) {
 	// find the desired pitch index (check to find
@@ -155,6 +180,7 @@ function alterBaseChord(chord, type, build, changes) {
 	}
     }
 }
+
 function generateChord(chordString) {
     // parse chord as list of aspects:
     // [chord, root, type, build, changes]
@@ -162,6 +188,8 @@ function generateChord(chordString) {
     var result = chordString.match(pattern);
     console.log(result);
     
+
+
     // alter chord as necessary
     var chord = new Chord(new Array(new Note(findNoteValue(result[1]))));
     buildBaseChord(result[2],
